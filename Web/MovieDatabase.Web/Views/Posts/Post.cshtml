@@ -1,0 +1,160 @@
+﻿@model MovieDatabase.Web.ViewModels.Posts.PostVM
+
+@{
+    this.ViewData["Title"] = Model.Name;
+}
+<div class="page-intro post-heading">
+    <h2>@Model.Name</h2>
+    <div class='rating-stars'>
+        <ul id='stars'>
+            <li class='star @(@Model.Movie.GivenUserRating >= 1 ? "selected" : "")' title='Poor' data-value='1'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 2 ? "selected" : "")' title='Fair' data-value='2'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 3 ? "selected" : "")' title='Good' data-value='3'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 4 ? "selected" : "")' title='Excellent' data-value='4'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 5 ? "selected" : "")' title='WOW!!!' data-value='5'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+        </ul>
+    </div>
+    <div class="post-meta text-right">
+        <div class="pull-left fb-share-button">
+            <!-- share button code -->
+            <div class="fb-share-button"
+                 data-href="http://moviedatabasenbu.azurewebsites.net/"
+                 data-layout="button_count">
+            </div>
+        </div>
+        <input hidden id="postId" value="@Model.Id" />
+        Posted by @Model.User.Firstname @Model.User.Lastname on @Model.CreatedOn.ToString("dd/MM/yyyy HH:mm")
+    </div>
+</div>
+
+<div class="panel panel-white mb post-panel">
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-5">
+                <img src="@Url.Content(@Model.Movie.PosterImageRelativeLink)" alt="@Model.Movie.Name" />
+            </div>
+            <div class="col-xs-12 col-md-7">
+                <div class="movie-title">
+                    <span class="movie-rating"><i class="fa fa-star"></i> <span class="rating-value">@Model.Movie.OverallRating.ToString("0.0")</span></span>
+                    @Model.Movie.Name (@Model.Movie.ReleaseDate.Year)
+                    <span class="wishlist-buttons">
+                        <a class="pull-right remove-from-wishlist" href="#" style="@(@Model.Movie.IsInWishlist ? "" : "display:none;")"><i class="fa fa-heart"></i></a>
+                        <a class="pull-right add-to-wishlist" href="#" style="@(@Model.Movie.IsInWishlist ? "display:none;" : "")"><i class="fa fa-heart-o"></i></a>
+                    </span>
+                    <span class="imdb-rating pull-right"><i class="fa fa-imdb"></i> @Model.Movie.ImdbRating.ToString("0.0")</span>
+                </div>
+                <div class="movie-category">
+                    @Model.Movie.Categories.First().Category.Name
+                </div>
+                <div class="movie-description mt">
+                    @Model.Movie.Description
+                    <br />
+                    <a href="@Model.Movie.TrailerLink" target="_blank">See trailer</a>
+                </div>
+                <div class="movie-keywords mt">
+                    @foreach (var keyword in Model.Movie.Keywords)
+                    {
+                        <label class="label label-light">@keyword.Name</label>
+                    }
+                </div>
+                <div class="movie-meta mt">
+                    @Model.Movie.Duration / @Model.Movie.Country / @Model.Movie.Language / @Model.Movie.Studio
+                    <br />
+                    Directed by @Model.Movie.Director.Name
+                    <br />
+                    Screenplay @Model.Movie.Screenwriter.Name
+                    <br />
+                    Music @Model.Movie.Composer.Name
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div class="panel panel-white mt post-panel">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-5">
+                <div class="section-heading text-center mb">Awards</div>
+                @foreach (var award in Model.Movie.Awards)
+                {
+                    <div class="cast-member text-center">
+                        <span class="">@award.Name</span>
+                    </div>
+                }
+            </div>
+            <div class="col-xs-12 col-md-offset-1 col-md-6">
+                <div class="section-heading text-center mb">Cast</div>
+                @foreach (var actor in Model.Movie.Actors)
+                {
+                    <div class="cast-member">
+                        <span class="pull-left">@actor.Actor.Name</span>
+                        <span class="pull-right">@actor.CharacterName</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_MovieComments" model="Model.Movie.Comments.OrderByDescending(c=>c.CreatedOn).ToList()" />
+
+
+<div id="fb-root"></div>
+
+@section Styles {
+    <environment names="Development,Staging,Production">
+        <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    </environment>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <environment names="Development,Staging,Production">
+        <script src="~/lib/toastr/toastr.min.js"></script>
+        <script src="~/js/common/rating.js"></script>
+        <script src="~/js/posts/show-post.js"></script>
+        <script src="~/js/posts/movie-comments.js"></script>
+    </environment>
+    <script>
+        (function (movieDbApp) {
+            movieDbApp.showPostConfig = {
+                rateMovieUrl: '@Url.Action("RatePost", "Posts")',
+                addToWishlistUrl: '@Url.Action("AddToWishlist", "Posts")',
+                removeFromWishlistUrl: '@Url.Action("RemoveFromWishlist", "Posts")',
+            }
+
+             movieDbApp.movieCommentsConfig = {
+                    addCommentUrl: '@Url.Action("AddComment", "Posts")',
+            }
+
+            movieDbApp.ratingInit();
+            movieDbApp.commentsInit();
+            movieDbApp.init();
+
+    })(window.movieDbApp);
+
+    //Load Facebook SDK for JavaScript
+     (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+}

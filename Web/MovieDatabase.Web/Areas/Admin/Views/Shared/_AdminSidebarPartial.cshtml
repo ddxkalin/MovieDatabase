@@ -1,0 +1,89 @@
+﻿@using MovieDatabase.Data.Models
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="dashb-01-sidebar sidebar-dark custom-scrollbar">
+    <div class="dashb-01-sidebar-content">
+
+        <!-- User -->
+        <div class="dashb-user">
+
+            <div class="image logo">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                    <img src="~/img/md_logo_white.png" alt="MovieDatabase">
+                </a>
+            </div>
+
+            <div class="dashb-user-heading">
+                <div class="name"> @this.UserManager.GetUserName(this.User)</div>
+                @*<div class="post">Company founder</div>*@
+            </div>
+
+        </div>
+        <!-- /User -->
+        <!-- Navigation -->
+        <ul class="dashb-sidebar-navigation dashb-sidebar-navigation-custom open list-animated"
+            data-list-delay="0.0" data-list-delay-step=".03" data-list-items="lst-nav-level-0">
+
+            <!-- Navigation Item -->
+            <li>
+                <a href="@Url.Action("Index", "Users", new {page = 1, pageSize = 20})" class="nav-item btn-waves">
+                    <i class="icon fa fa-user"></i>
+                    <span class="list-animated-item" data-list-name="lst-nav-level-0">Users</span>
+                </a>
+            </li>
+            <!-- /Navigation Item -->
+            <li class="separator"></li>
+            <!-- Navigation Item -->
+            <li>
+                <a href="@Url.Action("Index", "Posts", new {page = 1, pageSize = 20})" class="nav-item btn-waves">
+                    <i class="icon fa fa-pencil"></i>
+                    <span class="list-animated-item" data-list-name="lst-nav-level-0">Posts</span>
+                </a>
+            </li>
+            <!-- /Navigation Item -->
+            <!-- Navigation Item -->
+            <li>
+                <a href="@Url.Action("Index", "MovieCategories", new {page = 1, pageSize = 20})" class="nav-item btn-waves">
+                    <i class="icon fa fa-film"></i>
+                    <span class="list-animated-item" data-list-name="lst-nav-level-0">Film categories</span>
+                </a>
+            </li>
+            <!-- /Navigation Item -->
+            <!-- Navigation Item -->
+            <li>
+                <a href="@Url.Action("Index", "Actors", new {page = 1, pageSize = 20})" class="nav-item btn-waves">
+                    <i class="icon fa fa-users"></i>
+                    <span class="list-animated-item" data-list-name="lst-nav-level-0">Actors</span>
+                </a>
+            </li>
+            <!-- /Navigation Item -->
+            <!-- Navigation Item -->
+            <li>
+                <a href="@Url.Action("Index", "Screenwriters", new {page = 1, pageSize = 20})" class="nav-item btn-waves">
+                    <i class="icon fa fa-book"></i>
+                    <span class="list-animated-item" data-list-name="lst-nav-level-0">Screenwriters</span>
+                </a>
+            </li>
+            <!-- /Navigation Item -->
+            <!-- Navigation Item -->
+            <li>
+                <a href="@Url.Action("Index", "Directors", new {page = 1, pageSize = 20})" class="nav-item btn-waves">
+                    <i class="icon fa fa-video-camera"></i>
+                    <span class="list-animated-item" data-list-name="lst-nav-level-0">Directors</span>
+                </a>
+            </li>
+            <!-- /Navigation Item -->
+            <!-- Navigation Item -->
+            <li>
+                <a href="@Url.Action("Index", "Composers", new {page = 1, pageSize = 20})" class="nav-item btn-waves">
+                    <i class="icon fa fa-music"></i>
+                    <span class="list-animated-item" data-list-name="lst-nav-level-0">Composers</span>
+                </a>
+            </li>
+            <!-- /Navigation Item -->
+
+        </ul>
+        <!-- /Navigation -->
+
+    </div>
+</div>

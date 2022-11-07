@@ -1,0 +1,203 @@
+@model MovieDatabase.Web.Areas.Admin.Models.Screenwriters.ScreenwriterCombinedVM
+
+@{
+    ViewBag.Title = "Screenwriters";
+    Layout = "_Layout";
+    var ConfirmationModalModel = new MovieDatabase.Web.Areas.Admin.Models.ModalVM
+    {
+        ModalId = "delete-entity-modal",
+        ModalTitle = "Confirmation needed",
+        ModalMessage = "Are you sure you want to delete the selected entry?",
+        SubmitButtonText = "Confirm",
+    };
+    var ConfirmationRestoreModalModel = new MovieDatabase.Web.Areas.Admin.Models.ModalVM
+    {
+        ModalId = "restore-entity-modal",
+        ModalTitle = "Confirmation needed",
+        ModalMessage = "Are you sure you want to restore the selected entry?",
+        SubmitButtonText = "Confirm",
+    };
+}
+
+<partial name="_StatusMessage" model="ViewBag.Alert" />
+<partial name="_ConfirmationModal" model="ConfirmationModalModel" />
+<partial name="_ConfirmationModal" model="ConfirmationRestoreModalModel" />
+
+<div class="page-intro">
+    <h2>Screenwriters</h2>
+</div>
+
+<div class="row">
+    <form class="form-custom col-xs-12" method="get" asp-controller="Screenwriters" asp-action="Index" id="filter-form">
+        <div class="panel panel-white">
+            <div class="panel-body">
+
+                <input type="hidden" name="page" value="@Model.ScreenwriterList.CurrentPage" />
+                <div class="form-group row">
+                    <div class="col-xs-12 col-md-3">
+                        <div class="md-input">
+                            <label for="name" class="md-input-placeholder">Name</label>
+                            <input type="text" id="name" name="name" class="md-input-control" value="@Context.Request.Query["name"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
+                            Filter
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-right mb-0p5">
+            <div class="md-input input-inline">
+                <label for="pageSize" class="md-input-placeholder">Show</label>
+                <select id="pageSize" name="pageSize" class="md-input-control" onchange="$('#filter-form').submit()">
+                    <option value="10" selected="@(Context.Request.Query["pageSize"] == "10" ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Context.Request.Query["pageSize"] == "20" ? "selected" : null)">20</option>
+                    <option value="30" selected="@(Context.Request.Query["pageSize"] == "30" ? "selected" : null)">30</option>
+                </select>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<div class="panel panel-white col-xs-12 col-md-3">
+    <div class="panel-heading">
+        <div class="panel-title">Add screenwriter</div>
+    </div>
+    <div class="panel-body">
+        <form class="form-custom" method="Post" asp-controller="Screenwriters" asp-action="Create" id="add-entity-form">
+            <div class="form-group row mb-2x">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label for="name" class="md-input-placeholder">Name</label>
+                        <input asp-for="Screenwriter.Name" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Screenwriter.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
+                        Create
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-white col-xs-12 col-md-offset-1 col-md-8">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-hover no-mb">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>CreatedOn</th>
+                        <th>Is deleted</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var screenwriter in Model.ScreenwriterList.Screenwriters)
+                    {
+                        <tr>
+                            <td>@screenwriter.Name</td>
+                            <td>@screenwriter.CreatedOn.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @if (!screenwriter.IsDeleted)
+                                {
+                                    <span class='label label-success'>Not deleted</span>
+                                }
+                                else
+                                {
+                                    <span class='label label-danger'>Deleted</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!screenwriter.IsDeleted)
+                                {
+                                    <form method="post" asp-controller="Screenwriters" asp-action="Delete" id="deleteScreenwriterForm-@screenwriter.Id">
+                                        <input type="hidden" value="@screenwriter.Id" name="screenwriterId" />
+                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationModalModel.ModalId" data-form="#deleteScreenwriterForm-@screenwriter.Id"><i class="fa fa-trash-o"></i></a>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-controller="Screenwriters" asp-action="Restore" id="restoreScreenwriterForm-@screenwriter.Id">
+                                        <input type="hidden" value="@screenwriter.Id" name="screenwriterId" />
+                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationRestoreModalModel.ModalId" data-form="#restoreScreenwriterForm-@screenwriter.Id"><i class="fa fa-eye"></i></a>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (Model.ScreenwriterList.ShowPagination)
+{
+    <nav aria-label="Page navigation" class="col-md-offset-4">
+        <ul class="pagination no-mt mb">
+            <li>
+                <a href="@Url.Action("Index", "Screenwriters", new {
+                                               page = Model.ScreenwriterList.PreviousPage,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               name = Context.Request.Query["name"],
+                                           })" class="pagination-prev" aria-label="Previous"></a>
+            </li>
+            @for (int i = 1; i <= Model.ScreenwriterList.TotalPages; i++)
+            {
+                if (i == Model.ScreenwriterList.CurrentPage)
+                {
+                    <li class="active">
+                        <a href="@Url.Action("Index", "Screenwriters", new {
+                                               page = i,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               name = Context.Request.Query["name"],
+                                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="@Url.Action("Index", "Screenwriters", new {
+                                               page = i,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               name = Context.Request.Query["name"],
+                                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+
+            <li>
+                <a href="@Url.Action("Index", "Screenwriters", new {
+                                               page = Model.ScreenwriterList.NextPage,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               name = Context.Request.Query["name"],
+                                           })" class="pagination-next" aria-label="Next"></a>
+            </li>
+        </ul>
+    </nav>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

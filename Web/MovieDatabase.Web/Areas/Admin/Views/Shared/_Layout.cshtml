@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@this.ViewData["Title"] - Movie Database Admin</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/theme/components/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/theme/components/elegant-font/style.css" />
+        <link rel="stylesheet" href="~/theme/owl-carousel.css" />
+        <link rel="stylesheet" href="~/theme/jquery.mCustomScrollbar.css" />
+        <link rel="stylesheet" href="~/theme/theme-waves.css" />
+        <link rel="stylesheet" href="~/theme/theme.css" title="theme-default" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/components/font-awesome/css/font-awesome.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/components/elegant-font/style.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/owl-carousel.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/jquery.mCustomScrollbar.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/theme-waves.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/theme.min.css" title="theme-default" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
+    </environment>
+</head>
+<body class="admin-body dashb-01-expanded">
+    <!-- Top line -->
+    <div class="dashb-01-top-navigation affix">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-theme">
+
+            <!-- Menu Button -->
+            <div class="menu-button">
+                <a href="#" id="dashb-01-toggle" class="dashb-01-toggle menu-toggle open">
+                    <div class="menu-icon">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                    </div>
+                </a>
+            </div>
+            <!-- /Menu Button -->
+            <!-- Navbar Header -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#page-header-navigation" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <!-- /Navbar Header -->
+            <!-- Navbar Content -->
+            <div class="collapse navbar-collapse" id="page-header-navigation">
+
+                <!-- Navigation Right -->
+                @await this.Html.PartialAsync("_AdminLoginPartial")
+                <!-- /Navigation Right -->
+            </div>
+            <!-- /Navbar Content -->
+
+        </nav>
+        <!-- /Navigation -->
+
+    </div>
+    <!-- /Top line -->
+    <!-- Sidebar -->
+    @await this.Html.PartialAsync("_AdminSidebarPartial")
+    <!-- /Sidebar -->
+
+    <main class="main-container">
+        <div class="container">
+            @this.RenderBody()
+        </div>
+    </main>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/theme/theme.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script 
+                src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous">
+        </script>
+        <script 
+            src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+            crossorigin="anonymous">
+        </script>
+        <script src="~/theme/theme.js" asp-append-version="true"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @this.RenderSection("Scripts", required: false)
+</body>
+</html>

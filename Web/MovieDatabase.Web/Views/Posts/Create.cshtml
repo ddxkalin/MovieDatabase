@@ -1,0 +1,275 @@
+﻿@model MovieDatabase.Web.ViewModels.Posts.CreatePostVM
+
+@{
+    this.ViewData["Title"] = "New post";
+}
+
+<partial name="_StatusMessage" model="ViewBag.Alert" />
+
+<div class="page-intro">
+    <h2>New post</h2>
+</div>
+
+<form class="form-custom" method="post" asp-controller="Posts" asp-action="Create" id="add-post-form" enctype="multipart/form-data">
+    <input asp-for="Movie.ImdbRating" id="imdb-rating" hidden />
+    <input asp-for="Movie.Rating.Score" id="rating" hidden />
+
+    <div class="panel panel-white col-xs-12">
+        <div class="panel-body">
+
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label asp-for="Name" class="md-input-placeholder">Post title</label>
+                        <input asp-for="Name" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-2x mt-2x">
+                <div class="section-heading col-xs-12 col-md-6">
+                    Movie
+                    <span class="imdb-rating hidden"><i class="fa fa-imdb"></i> <span class="rating-value"></span></span>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class='rating-stars text-right'>
+                        <ul id='stars'>
+                            <li class='star' title='Poor' data-value='1'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='Fair' data-value='2'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='Good' data-value='3'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='Excellent' data-value='4'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='WOW!!!' data-value='5'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label asp-for="Movie.Name" class="md-input-placeholder">Title</label>
+                        <input asp-for="Movie.Name" class="md-input-control movie-title">
+                    </div>
+                    <span asp-validation-for="Movie.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label asp-for="Movie.Description" class="md-input-placeholder">Description</label>
+                        <textarea asp-for="Movie.Description" class="md-input-control form-control"></textarea>
+                    </div>
+                    <span asp-validation-for="Movie.Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2x">
+                <div class="col-xs-12 col-md-6">
+                    <div class="md-input">
+                        <label asp-for="Movie.PosterImage" class="md-input-placeholder">Poster</label>
+                        <input asp-for="Movie.PosterImage" class="md-input-control" />
+                    </div>
+                    <span asp-validation-for="Movie.PosterImage" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="md-input">
+                        <label asp-for="Movie.TrailerLink" class="md-input-placeholder">Link to trailer</label>
+                        <input asp-for="Movie.TrailerLink" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Movie.TrailerLink" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2x">
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input">
+                        <label asp-for="Movie.Categories[0].CategoryId" class="md-input-placeholder">Genre</label>
+                        <select asp-for="Movie.Categories[0].CategoryId" asp-items="ViewBag.MovieCategories" class="md-input-control"></select>
+                    </div>
+                    <span asp-validation-for="Movie.Categories[0].CategoryId" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input" role="wrapper">
+                        <label asp-for="Movie.ReleaseDate" class="md-input-placeholder">Release date</label>
+                        <input asp-for="Movie.ReleaseDate" class="md-input-control datepicker" type="text">
+                    </div>
+                    <span asp-validation-for="Movie.ReleaseDate" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input">
+                        <label asp-for="Movie.Studio" class="md-input-placeholder">Studio</label>
+                        <input asp-for="Movie.Studio" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Movie.Studio" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input">
+                        <label asp-for="Movie.Duration" class="md-input-placeholder">Duration</label>
+                        <input asp-for="Movie.Duration" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Movie.Duration" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input" role="wrapper">
+                        <label asp-for="Movie.Country" class="md-input-placeholder">Country</label>
+                        <input asp-for="Movie.Country" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Movie.Country" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input">
+                        <label asp-for="Movie.Language" class="md-input-placeholder">Language</label>
+                        <input asp-for="Movie.Language" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Movie.Language" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label asp-for="Movie.KeywordsString" class="md-input-placeholder">Keywords</label>
+                        <input asp-for="Movie.KeywordsString" class="md-input-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2x mt-2x">
+                <div class="section-heading col-xs-12 text-center">Cast</div>
+            </div>
+
+            <div class="form-group row mb-2x">
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input">
+                        <label asp-for="Movie.DirectorId" class="md-input-placeholder">Director</label>
+                        <select asp-for="Movie.DirectorId" asp-items="ViewBag.Directors" class="md-input-control"></select>
+                    </div>
+                    <span asp-validation-for="Movie.DirectorId" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input">
+                        <label asp-for="Movie.ScreenwriterId" class="md-input-placeholder">Screenwriter</label>
+                        <select asp-for="Movie.ScreenwriterId" asp-items="ViewBag.Screenwriters" class="md-input-control"></select>
+                    </div>
+                    <span asp-validation-for="Movie.ScreenwriterId" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="md-input">
+                        <label asp-for="Movie.ComposerId" class="md-input-placeholder">Composer</label>
+                        <select asp-for="Movie.ComposerId" asp-items="ViewBag.Composers" class="md-input-control"></select>
+                    </div>
+                    <span asp-validation-for="Movie.ComposerId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-6">Actor</div>
+                <div class="col-xs-12 col-md-6">Character</div>
+            </div>
+
+            <div class="form-group row cast">
+                <div class="col-xs-12 col-md-6">
+                    <div class="md-input">
+                        <input type="text" class="md-input-control typeahead">
+                    </div>
+                    <span asp-validation-for="Movie.Actors[0].ActorId" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="md-input movie-actor">
+                        <input asp-for="Movie.Actors[0].CharacterName" class="md-input-control character-name">
+                        <input hidden asp-for="Movie.Actors[0].ActorId" class="actor-id" />
+                    </div>
+                    <span asp-validation-for="Movie.Actors[0].CharacterName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row ">
+                <div class="col-xs-12">
+                    <button type="button" class="btn btn-secondary btn-waves" id="actor-add-btn"><i class="fa fa-plus"></i> Add actor</button>
+                    <button type="button" class="btn btn-danger btn-waves hidden" id="actor-remove-btn"><i class="fa fa-minus"></i> Remove actor</button>
+                </div>
+            </div>
+
+            <div class="row mb-2x mt-2x">
+                <div class="section-heading col-xs-12">Awards</div>
+            </div>
+
+            <div class="form-group row award">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <input asp-for="Movie.Awards[0].Name" class="md-input-control award-name">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <button type="button" class="btn btn-secondary btn-waves" id="award-add-btn"><i class="fa fa-plus"></i> Add award</button>
+                    <button type="button" class="btn btn-danger btn-waves hidden" id="award-remove-btn"><i class="fa fa-minus"></i> Remove award</button>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2x">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
+                        Add post
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Styles {
+    <environment names="Development,Staging,Production">
+        <link rel="stylesheet" href="~/lib/gijoe/gijoe.min.css" />
+    </environment>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <environment names="Development,Staging,Production">
+        <script src="~/lib/typeahead/typeahead.bundle.js"></script>
+        <script src="~/lib/gijoe/gijoe.min.js"></script>
+        <script src="~/js/common/rating.js"></script>
+        <script src="~/js/posts/create-post.js"></script>
+    </environment>
+    <script>
+        (function (movieDbApp) {
+            movieDbApp.createPostConfig = {
+                getActorsUrl: '@Url.Action("GetActors", "Actors", new { name = Html.Raw("QUERY") })',
+                getImdbRatingUrl: '@Url.Action("GetMovieImdbRating", "Posts")',
+                actorHtml: {
+                    characterNameInput: '@Html.TextBoxFor(m => m.Movie.Actors[0].CharacterName, new { @class = "md-input-control character-name" })',
+                    actorIdInput: '@Html.HiddenFor(m=>m.Movie.Actors[0].ActorId, new{ @class= "actor-id" })',
+                    actorIdValidation: '@Html.ValidationMessageFor(m=>m.Movie.Actors[0].ActorId, null, new {@class="text-danger" })',
+                    characterNameValidation: '@Html.ValidationMessageFor(m=>m.Movie.Actors[0].CharacterName, null, new {@class="text-danger" })',
+                },
+                awardHtml: {
+                    awardInput: '@Html.TextBoxFor(m => m.Movie.Awards[0].Name, new { @class = "md-input-control" })'
+                }
+            }
+
+            movieDbApp.ratingInit();
+            movieDbApp.init();
+        })(window.movieDbApp);
+
+        $('.datepicker').datepicker({
+            modal: false,
+            showRightIcon: false,
+        });
+    </script>
+}

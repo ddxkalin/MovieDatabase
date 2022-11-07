@@ -1,0 +1,158 @@
+@model MovieDatabase.Web.Areas.Admin.Models.Users.UserListVM
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "_Layout";
+}
+
+<div class="page-intro">
+    <h2>Users</h2>
+</div>
+
+<div class="row">
+    <form class="form-custom col-xs-12" method="get" asp-controller="Users" asp-action="Index" id="filter-form">
+        <div class="panel panel-white">
+            <div class="panel-body">
+
+                <input type="hidden" name="page" value="@Model.CurrentPage" />
+                <div class="form-group row">
+                    <div class="col-xs-12 col-md-3">
+                        <div class="md-input">
+                            <label for="usernameEmail" class="md-input-placeholder">Username/Email</label>
+                            <input type="text" id="usernameEmail" name="usernameEmail" class="md-input-control" value="@Context.Request.Query["usernameEmail"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
+                            Filter
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-right mb-0p5">
+            <div class="md-input input-inline">
+                <label for="usernameEmail" class="md-input-placeholder">Show</label>
+                <select id="pageSize" name="pageSize" class="md-input-control" onchange="$('#filter-form').submit()">
+                    <option value="10" selected="@(Context.Request.Query["pageSize"] == "10" ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Context.Request.Query["pageSize"] == "20" ? "selected" : null)">20</option>
+                    <option value="30" selected="@(Context.Request.Query["pageSize"] == "30" ? "selected" : null)">30</option>
+                </select>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<div class="panel panel-white">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-hover no-mb">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Registered on</th>
+                        <th>Email verified</th>
+                        <th>Is active</th>
+                        @*<th>Is deleted</th>*@
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <td>@user.Email</td>
+                            <td>@user.Username</td>
+                            <td>@user.Firstname @user.Lastname</td>
+                            <td>@user.CreatedOn.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @if (user.EmailConfirmed)
+                                {
+                                    <span class='label label-success'>Confirmed</span>
+                                }
+                                else
+                                {
+                                    <span class='label label-danger'>Not confirmed</span>
+                                }
+                            </td>
+                            <td>
+                                @if (user.IsActive)
+                                {
+                                    <span class='label label-success'>Active</span>
+                                }
+                                else
+                                {
+                                    <span class='label label-danger'>Disabled</span>
+                                }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("UserProfile", "Users", new { userId = user.Id})">To profile</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (Model.ShowPagination)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination no-mt mb">
+            <li>
+                <a href="@Url.Action("Index", "Users", new {
+                                               page = Model.PreviousPage,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })" class="pagination-prev" aria-label="Previous"></a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="active">
+                        <a href="@Url.Action("Index", "Users", new {
+                                               page = i,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="@Url.Action("Index", "Users", new {
+                                               page = i,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+
+            <li>
+                <a href="@Url.Action("Index", "Users", new {
+                                               page = Model.NextPage,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })" class="pagination-next" aria-label="Next"></a>
+            </li>
+        </ul>
+    </nav>
+}
+

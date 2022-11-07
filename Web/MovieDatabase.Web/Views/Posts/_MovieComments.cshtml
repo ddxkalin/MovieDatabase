@@ -1,0 +1,60 @@
+﻿@model List<MovieDatabase.Web.ViewModels.Posts.CommentVM>
+
+<div class="panel panel-white mt post-panel">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-12 mb">
+
+                @*<form class="form-custom" method="post" asp-controller="Posts" asp-action="CommentPost" id="add-comment-form">*@
+                <div class="row form-group">
+                    <div class="col-xs-12">
+                        <div class="md-input">
+                            <label for="newComment" class="md-input-placeholder">Comment</label>
+                            <textarea name="newComment" id="newComment" class="md-input-control form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row mt">
+                    <div class="col-xs-12 text-right">
+                        <button type="submit" class="btn btn-waves btn-primary btn-sm waves-effect waves-light add-comment">
+                            Post comment
+                        </button>
+                    </div>
+                </div>
+                @*</form>*@
+
+            </div>
+        </div>
+
+        <div class="comments-box">
+            @foreach (var comment in Model)
+            {
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 mb-0p5">
+                        <div class="col-xs-12 col-lg-3 comment-meta">
+                            <span class="comment-author">@comment.Author.Firstname @comment.Author.Lastname</span>
+                            <span class="comment-date">@comment.CreatedOn.ToString("dd/MM/yy HH:mm")</span>
+                        </div>
+
+                        <div class="col-xs-12 col-lg-9 comment-text">
+                            @comment.Name
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.Count == 0)
+            {
+                <div class="row empty-comment">
+                    <div class="col-xs-12 col-md-12">
+
+                        <div class="text-center text-large">
+                            Be the first to comment this film
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
